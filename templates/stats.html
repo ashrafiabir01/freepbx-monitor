@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.2.0/socket.io.js"></script>
+    <style>
+        body {
+            background-color: white;
+        }
+        .container {
+            background-color: black;
+            width: 70%;
+            height: fit-content;
+            position: absolute;
+            top: 50%;
+            color: #00BA00;
+            font-weight: 700;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+        }
+    </style>
+    <script>
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+        socket.on('update_data', function(data) {
+          data = data.replace('"', "<br>").replace('"',"").replace("\\ /","\\");
+            document.getElementById("response").innerHTML = data;
+        });
+        socket.emit('get_data');
+        setInterval(function(){
+            socket.emit('get_data');
+        }, 1000);
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div id="response"></div>
+    </div>
+</body>
+</html>
